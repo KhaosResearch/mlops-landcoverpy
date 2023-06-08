@@ -1,7 +1,7 @@
 import os
 
 import mlflow
-from training.landcoverpy_model import LandcoverpyModel
+from landcoverpy_model import LandcoverpyModel
 
 class LancoverpyMlflowWrapper(mlflow.pyfunc.PythonModel):
     def load_context(self, context):
