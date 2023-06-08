@@ -1,0 +1,10 @@
+#Pyenv
+.python-version
+
+#Prefect
+.prefectignore
+
+#Python
+__pycache__
+
+base_model
