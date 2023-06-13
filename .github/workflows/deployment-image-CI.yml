@@ -16,5 +16,5 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build and push the Docker Image to the GitHub Container Registry
       run: 
-        docker build deployment --file Dockerfile --tag ghcr.io/khaosresearch/deploy-landcover:$(date +%s)
+        docker build ./deployment/ --tag ghcr.io/khaosresearch/deploy-landcover:$(date +%s)
         docker push ghcr.io/khaosresearch/deploy-landcover:$(date +%s)
