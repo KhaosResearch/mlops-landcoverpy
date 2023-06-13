@@ -8,8 +8,8 @@ WORKDIR /home
 COPY ./LandcoverSeldonWrapper.py /home
 COPY ./requirements.txt /home
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update
-RUN DEBIAN_FRONTEND=noninteractive apt-get install libgeos-dev
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" update
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" libgeos-dev
 
 RUN pip install --only-binary :all: rasterio==1.3.7
 RUN pip install --upgrade pip
