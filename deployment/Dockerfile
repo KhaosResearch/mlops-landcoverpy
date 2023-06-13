@@ -8,6 +8,8 @@ WORKDIR /home
 COPY ./LandcoverSeldonWrapper.py /home
 COPY ./requirements.txt /home
 
+RUN sudo apt-get install libgeos-dev
+
 RUN pip install --only-binary :all: rasterio==1.3.7
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
