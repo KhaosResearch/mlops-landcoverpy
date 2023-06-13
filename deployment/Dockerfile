@@ -8,6 +8,7 @@ WORKDIR /home
 COPY ./LandcoverSeldonWrapper.py /home
 COPY ./requirements.txt /home
 
+RUN pip install --only-binary :all: rasterio==1.3.7
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 # Port for GRPC
