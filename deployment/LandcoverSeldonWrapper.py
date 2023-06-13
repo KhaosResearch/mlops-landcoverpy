@@ -28,7 +28,7 @@ class LandcoverSeldonWrapper:
 
         self.ready = True
 
-    def predict(self, X):
+    def predict(self, X, features_names=None):
         if not self.ready:
             self.load_model()
         
