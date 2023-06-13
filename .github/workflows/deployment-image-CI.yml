@@ -24,7 +24,7 @@ jobs:
     - name: Build and push Docker images
       uses: docker/build-push-action@v4.1.0
       with:
-        context: .
+        context: ./deployment/
         file: ./deployment/Dockerfile
         push: true
         tags: ghcr.io/khaosresearch/deploy-landcover
