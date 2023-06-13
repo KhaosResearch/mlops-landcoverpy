@@ -8,6 +8,7 @@ WORKDIR /home
 COPY ./LandcoverSeldonWrapper.py /home
 COPY ./requirements.txt /home
 
+RUN pip install --only-binary :all: rasterio==1.3a3
 RUN pip install -r requirements.txt
 # Port for GRPC
 EXPOSE 5000
