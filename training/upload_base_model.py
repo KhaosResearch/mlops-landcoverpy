@@ -61,7 +61,7 @@ with mlflow.start_run(experiment_id=experiment_id):
                             registered_model_name="landcoverpy",
                             code_path=["landcoverpy_mlflow_wrapper.py", "landcoverpy_model.py"],
                             pip_requirements=["landcoverpy","mlflow==2.3.1"],
-                            python_model=LancoverpyMlflowWrapper(),
+                            python_model=LancoverMlflowWrapper(),
                             artifacts={"model_file": model_file, "confusion_matrix": confusion_matrix_png, "training_data": training_data, "testing_data": testing_data, "metadata_file": metadata_file}
                             )
     
