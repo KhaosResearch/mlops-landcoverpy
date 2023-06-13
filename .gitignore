@@ -8,3 +8,4 @@
 __pycache__
 
 base_model
+.env

@@ -1,0 +1,5 @@
+mlflow==2.3.1
+boto3==1.26.90
+seldon-core==1.16.0
+greensenti @ git+ssh://git@github.com/KhaosResearch/greensenti.git@v0.5.1
+landcoverpy @ git+ssh://git@github.com/KhaosResearch/landcoverpy.git@mlops

@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from prefect.filesystems import S3
 
-from landcoverpy_mlflow_wrapper import LancoverpyMlflowWrapper
+from training.landcover_mlflow_wrapper import LancoverMlflowWrapper
 
 def confusion_matrix_to_metrics(confusion_matrix_path: np.ndarray) -> dict:
 
@@ -62,7 +62,7 @@ with mlflow.start_run(experiment_id=experiment_id):
                             code_path=["landcoverpy_mlflow_wrapper.py", "landcoverpy_model.py"],
                             pip_requirements=["landcoverpy","mlflow==2.3.1"],
                             python_model=LancoverpyMlflowWrapper(),
-                            artifacts={"model_file": model_file, "confusion_matrix": confusion_matrix_png, "training_data": training_data, "testing_data": testing_data}
+                            artifacts={"model_file": model_file, "confusion_matrix": confusion_matrix_png, "training_data": training_data, "testing_data": testing_data, "metadata_file": metadata_file}
                             )
     
     with open(metadata_file) as f:
