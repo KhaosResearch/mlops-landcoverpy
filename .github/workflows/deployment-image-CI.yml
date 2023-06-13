@@ -8,13 +8,23 @@ on:
 
 jobs:
 
-  build:
+  build-push-deployment:
 
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
     - name: Build and push the Docker Image to the GitHub Container Registry
-      run: 
-        docker build ./deployment/ --tag ghcr.io/khaosresearch/deploy-landcover:$(date +%s)
-        docker push ghcr.io/khaosresearch/deploy-landcover:$(date +%s)
+      uses: actions/checkout@v3
+    - name: Build and push the Docker Image to the GitHub Container Registry
+      uses: docker/login-action@v2.2.0
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build and push Docker images
+      uses: docker/build-push-action@v4.1.0
+      with:
+        file: ./deployment/Dockerfile
+        push: true
+        tags: ghcr.io/khaosresearch/deploy-landcover
+        label: latest
