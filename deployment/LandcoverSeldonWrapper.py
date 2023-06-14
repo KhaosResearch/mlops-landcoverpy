@@ -32,8 +32,8 @@ class LandcoverSeldonWrapper:
         if not self.ready:
             self.load_model()
         
-        minio_url = self.predictor.predict(X)
-        return {'result' : minio_url}
+        download_url = self.predictor.predict(X)
+        return {'result' : download_url}
     
     def metrics(self):
         return []

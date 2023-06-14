@@ -7,7 +7,7 @@ LABEL org.opencontainers.image.licenses=MIT
 WORKDIR /home
 COPY ./LandcoverSeldonWrapper.py /home
 COPY ./requirements.txt /home
-RUN mkdir -p -v /home/files
+RUN mkdir -p -v /home/files/tmp
 RUN chown -R 8888 /home
 RUN chmod -R 755 /home
 

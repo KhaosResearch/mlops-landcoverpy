@@ -1,0 +1,109 @@
+apiVersion: machinelearning.seldon.io/v1alpha2
+kind: SeldonDeployment
+metadata:
+  labels:
+    app: seldon
+    sidecar.istio.io/inject: "true"
+  name: landcover-seldon
+  namespace: mlops-seldon
+spec:
+  annotations:
+    seldon.io/grpc-max-message-size: '1000000000'
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/prometheus"
+  name: landcover-seldon
+  predictors:
+  - componentSpecs:
+    - spec:
+        containers:
+        - image: ghcr.io/khaosresearch/deploy-landcover:latest
+          imagePullPolicy: Always
+          name: predictor
+          env:
+          - name: SELDON_LOG_LEVEL
+            value: INFO
+          - name: GUNICORN_WORKERS
+            value: '1'
+          - name: GRPC_WORKERS
+            value: '1'
+          - name: MLFLOW_S3_IGNORE_TLS
+            value: "true"
+          - name: MLFLOW_S3_ENDPOINT_URL
+            value: ""
+          - name: MLFLOW_TRACKING_URI
+            value: ""
+          - name: AWS_ACCESS_KEY_ID
+            value: ""
+          - name: AWS_SECRET_ACCESS_KEY
+            value: ""
+          - name: MINIO_HOST
+            value: ""
+          - name: MINIO_PORT
+            value: ""
+          - name: MINIO_ACCESS_KEY
+            value: ""
+          - name: MINIO_SECRET_KEY
+            value: ""
+          - name: MINIO_BUCKET_NAME_PRODUCTS
+            value: ""
+          - name: MINIO_BUCKET_NAME_ASTER
+            value: ""
+          - name: MINIO_BUCKET_NAME_DEM
+            value: ""
+          - name: MINIO_BUCKET_MODELS
+            value: ""
+          - name: MINIO_BUCKET_CLASSIFICATIONS
+            value: ""
+          - name: MINIO_DATA_FOLDER_NAME
+            value: ""
+          - name: MONGO_HOST
+            value: ""
+          - name: MONGO_PORT
+            value: ""
+          - name: MONGO_USERNAME
+            value: ""
+          - name: MONGO_PASSWORD
+            value: ""
+          - name: MONGO_DB
+            value: ""
+          - name: MONGO_PRODUCTS_COLLECTION
+            value: ""
+          - name: TMP_DIR
+            value: ""
+          - name: SPRING_START
+            value: ""
+          - name: SPRING_END
+            value: ""
+          - name: SUMMER_START
+            value: ""
+          - name: SUMMER_END
+            value: ""
+          - name: AUTUMN_START
+            value: ""
+          - name: AUTUMN_END
+            value: ""
+          - name: LAND_COVER_MODEL_FOLDER
+            value: ""
+          resources:
+            requests:
+              memory: "4Gi"
+              cpu: "2"
+            limits:
+              memory: "4Gi"
+              cpu: "2"
+    graph:
+      children: []
+      parameters:
+      - name: file_path
+        type: STRING
+        value: files
+      - name: model_version
+        type: STRING
+        value: latest
+      name: predictor
+      type: MODEL
+      endpoint:
+        type: REST
+    name: main
+    replicas: 1
+    traffic : 100
