@@ -11,8 +11,8 @@ RUN mkdir -p -v /home/files
 RUN chown -R 8888 /home
 RUN chmod -R 755 /home
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" update
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" libgeos-dev
+RUN apt-get -y  update
+RUN apt-get install -y  libgeos-dev
 
 RUN pip install --only-binary :all: rasterio==1.3.7
 RUN pip install --upgrade pip
@@ -39,6 +39,8 @@ ENV MINIO_PORT=""
 ENV MINIO_ACCESS_KEY=""
 ENV MINIO_SECRET_KEY=""
 ENV MINIO_BUCKET_NAME_PRODUCTS=""
+ENV MINIO_BUCKET_NAME_ASTER=""
+ENV MINIO_BUCKET_NAME_DEM=""
 ENV MINIO_BUCKET_MODELS=""
 ENV MINIO_BUCKET_CLASSIFICATIONS=""
 ENV MINIO_DATA_FOLDER_NAME=""

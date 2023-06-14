@@ -34,3 +34,6 @@ class LandcoverSeldonWrapper:
         
         minio_url = self.predictor.predict(X)
         return {'result' : minio_url}
+    
+    def metrics(self):
+        return []
