@@ -7,6 +7,7 @@ LABEL org.opencontainers.image.licenses=MIT
 WORKDIR /home
 COPY ./LandcoverSeldonWrapper.py /home
 COPY ./requirements.txt /home
+RUN mkdir -p -v /home/files
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" libgeos-dev
