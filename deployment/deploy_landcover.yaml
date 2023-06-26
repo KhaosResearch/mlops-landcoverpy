@@ -99,7 +99,7 @@ spec:
         value: files
       - name: model_version
         type: STRING
-        value: latest
+        value: production
       name: predictor
       type: MODEL
       endpoint:

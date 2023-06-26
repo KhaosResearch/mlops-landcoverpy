@@ -11,3 +11,6 @@ base_model
 .env
 
 *.copy
+
+mlruns
+files/
