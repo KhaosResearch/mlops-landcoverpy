@@ -13,4 +13,3 @@ base_model
 *.copy
 
 mlruns
-files/

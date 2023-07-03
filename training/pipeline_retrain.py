@@ -59,7 +59,7 @@ def deploy_best_model(model_name):
 
     mlflow_client = mlflow.client.MlflowClient()
 
-    model_versions_metadata = mlflow_client.search_model_versions(f"name='landcoverpy'").to_list()
+    model_versions_metadata = mlflow_client.search_model_versions(f"name='{model_name}'").to_list()
 
     production_run_id = next(filter(lambda x: x.current_stage == "Production", model_versions_metadata)).run_id
     production_accuracy = mlflow_client.get_metric_history(production_run_id, key="accuracy")[0].value

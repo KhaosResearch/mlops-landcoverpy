@@ -1,0 +1,109 @@
+apiVersion: machinelearning.seldon.io/v1alpha2
+kind: SeldonDeployment
+metadata:
+  labels:
+    app: seldon
+    sidecar.istio.io/inject: "true"
+  name: landcover-seldon
+  namespace: mlops-seldon
+spec:
+  annotations:
+    seldon.io/grpc-max-message-size: '1000000000'
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/prometheus"
+  name: landcover-seldon
+  predictors:
+  - componentSpecs:
+    - spec:
+        containers:
+        - image: ghcr.io/khaosresearch/deploy-landcover:latest
+          imagePullPolicy: Always
+          name: predictor
+          env:
+          - name: SELDON_LOG_LEVEL
+            value: INFO
+          - name: GUNICORN_WORKERS
+            value: '1'
+          - name: GRPC_WORKERS
+            value: '1'
+          - name: MLFLOW_S3_IGNORE_TLS
+            value: "true"
+          - name: MLFLOW_S3_ENDPOINT_URL
+            value: "http://<S3-IP>:<S3-PORT>"
+          - name: MLFLOW_TRACKING_URI
+            value: "http://<CLUSTER-IP>:<MLFLOW-PORT>"
+          - name: AWS_ACCESS_KEY_ID
+            value: ***REMOVED***
+          - name: AWS_SECRET_ACCESS_KEY
+            value: ***REMOVED***
+          - name: MINIO_HOST
+            value: "<S3-IP>"
+          - name: MINIO_PORT
+            value: "<S3-PORT>"
+          - name: MINIO_ACCESS_KEY
+            value: ***REMOVED***
+          - name: MINIO_SECRET_KEY
+            value: ***REMOVED***
+          - name: MINIO_BUCKET_NAME_PRODUCTS
+            value: etc-products
+          - name: MINIO_BUCKET_NAME_ASTER
+            value: aster-gdem-aspect-slope
+          - name: MINIO_BUCKET_NAME_DEM
+            value: aster-gdem-unzip
+          - name: MINIO_BUCKET_MODELS
+            value: etc-models
+          - name: MINIO_BUCKET_CLASSIFICATIONS
+            value: etc-classifications
+          - name: MINIO_DATA_FOLDER_NAME
+            value: mlops-base-model
+          - name: MONGO_HOST
+            value: "192.168.219.5"
+          - name: MONGO_PORT
+            value: "27017"
+          - name: MONGO_USERNAME
+            value: root
+          - name: MONGO_PASSWORD
+            value: kha0sd3v
+          - name: MONGO_DB
+            value: products_database
+          - name: MONGO_PRODUCTS_COLLECTION
+            value: products_collection
+          - name: TMP_DIR
+            value: "/home/files/tmp"
+          - name: SPRING_START
+            value: "2021-03-01"
+          - name: SPRING_END
+            value: "2021-04-30"
+          - name: SUMMER_START
+            value: "2021-06-01"
+          - name: SUMMER_END
+            value: "2021-07-31"
+          - name: AUTUMN_START
+            value: "2021-10-01"
+          - name: AUTUMN_END
+            value: "2021-11-30"
+          - name: LAND_COVER_MODEL_FOLDER
+            value: "land-cover"
+          resources:
+            requests:
+              memory: "4Gi"
+              cpu: "2"
+            limits:
+              memory: "4Gi"
+              cpu: "2"
+    graph:
+      children: []
+      parameters:
+      - name: file_path
+        type: STRING
+        value: files
+      - name: model_version
+        type: STRING
+        value: production
+      name: predictor
+      type: MODEL
+      endpoint:
+        type: REST
+    name: main
+    replicas: 1
+    traffic : 100
