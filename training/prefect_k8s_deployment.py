@@ -15,7 +15,7 @@ environment = {
         'MLFLOW_S3_IGNORE_TLS': "true"
     }
 
-environment = environment | dict(settings)  
+environment = dict(settings) | environment
 
 infra_k8s = KubernetesJob(
     env=environment,
@@ -26,3 +26,5 @@ infra_k8s = KubernetesJob(
     job=KubernetesJob.base_job_manifest(),
     finished_job_ttl=600
 )
+
+infra_k8s.save("k8s-infra-retraining", overwrite=True)
