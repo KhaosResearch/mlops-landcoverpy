@@ -9,6 +9,8 @@ RUN mkdir -p -v /home/files/tmp
 RUN chown -R 8888 /home
 RUN chmod -R 755 /home
 
+RUN apt-get -y  update
+
 COPY ./files/deploy_landcover.yaml /home/files
 
 ENV EXTRA_PIP_PACKAGES= 's3fs==2023.4.0,boto3==1.26.90,mlflow==2.3.1'
