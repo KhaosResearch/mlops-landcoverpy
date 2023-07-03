@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prefect-agent
+  namespace: mlops-prefect
+  labels:
+    app: prefect-agent
+spec:
+  selector:
+    matchLabels:
+      app: prefect-agent
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: prefect-agent
+    spec:
+      containers:
+        - name: agent
+          image: prefecthq/prefect:2.10.4-python3.11-kubernetes
+          command: ["prefect", "agent", "start", "-q", "default"]
+          imagePullPolicy: "Always"
+          resources:
+            limits:
+              cpu: "2"
+              memory: "32Gi"
+            requests:
+              cpu: "2"
+              memory: "32Gi"
+          env:
+            - name: PREFECT_API_URL
+              value: http://<CLUSTER-IP>:<PREFECT-API-PORT>/api
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: prefect-agent
+  namespace: mlops-prefect
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "pods/log", "pods/status"]
+    verbs: ["get", "watch", "list"]
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: [ "get", "list", "watch", "create", "update", "patch", "delete" ]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: prefect-agent-role-binding
+  namespace: mlops-prefect
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: mlops-prefect
+roleRef:
+  kind: Role
+  name: prefect-agent
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: prefect-agent
+rules:
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: prefect-agent-cluster-role-binding
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: mlops-prefect
+roleRef:
+  kind: ClusterRole
+  name: prefect-agent
+  apiGroup: rbac.authorization.k8s.io
+
