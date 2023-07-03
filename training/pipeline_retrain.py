@@ -80,9 +80,10 @@ def deploy_best_model(model_name):
         custom_api = client.CustomObjectsApi()
         with open("files/deploy_landcover.yaml", 'r') as stream:
             deployment_yaml = yaml.safe_load(stream)
+        for k,v in os.environ.items():
+            deployment_yaml["spec"]["predictors"][0]["componentSpecs"][0]["spec"]["containers"][0]["env"].append({k:v})
 
         try:
-
             mlflow_client.transition_model_version_stage(model_name, latest_version, stage="Production")
 
             custom_api.create_namespaced_custom_object(
