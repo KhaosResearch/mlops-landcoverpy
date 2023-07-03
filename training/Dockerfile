@@ -1,15 +1,13 @@
 FROM prefecthq/prefect:2.10.4-python3.11-kubernetes
 
 LABEL org.opencontainers.image.source=https://github.com/KhaosResearch/mlops-landcoverpy/
-LABEL org.opencontainers.image.description="Landcover model deployment image"
+LABEL org.opencontainers.image.description="Prefect retraining flow image"
 LABEL org.opencontainers.image.licenses=MIT
 
 WORKDIR /home
 RUN mkdir -p -v /home/files/tmp
 RUN chown -R 8888 /home
 RUN chmod -R 755 /home
-
-RUN apt-get -y  update
 
 COPY ./files/deploy_landcover.yaml /home/files
 
