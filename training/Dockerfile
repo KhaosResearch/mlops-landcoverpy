@@ -9,6 +9,7 @@ RUN mkdir -p -v /home/files/tmp
 RUN chown -R 8888 /home
 RUN chmod -R 755 /home
 
+COPY ./requirements.txt /home
 COPY ./files/deploy_landcover.yaml /home/files
 
 RUN pip install --upgrade pip
