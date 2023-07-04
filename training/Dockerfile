@@ -9,6 +9,9 @@ RUN mkdir -p -v /home/files/tmp
 RUN chown -R 8888 /home
 RUN chmod -R 755 /home
 
+RUN apt-get -y  update
+RUN apt-get install -y  libgeos-dev
+
 COPY ./requirements.txt /home
 COPY ./files/deploy_landcover.yaml /home/files
 

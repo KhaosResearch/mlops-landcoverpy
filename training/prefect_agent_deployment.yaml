@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: agent
-          image: prefecthq/prefect:2.10.4-python3.11-kubernetes
+          image: ghcr.io/khaosresearch/prefect-landcover:latest
           command: ["prefect", "agent", "start", "-q", "default"]
           imagePullPolicy: "Always"
           resources:
