@@ -32,8 +32,12 @@ class LandcoverSeldonWrapper:
         if not self.ready:
             self.load_model()
         
-        download_url = self.predictor.predict(X)
+        download_url, prediction_metrics = self.predictor.predict(X)
+
+        self.prediction_metrics = prediction_metrics
+
         return {'result' : download_url}
     
     def metrics(self):
-        return []
+        custom_gauge_metrics = [{"type": "GAUGE", "key": k, "value": v} for k,v in self.prediction_metrics]
+        return custom_gauge_metrics

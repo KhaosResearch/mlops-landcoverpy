@@ -14,5 +14,5 @@ class LancoverMlflowWrapper(mlflow.pyfunc.PythonModel):
         self.landcoverpy_model = LandcoverModel(model_file, used_columns)
 
     def predict(self, context, model_input_dict):
-        out_df = self.landcoverpy_model.predict(**model_input_dict)
-        return out_df
+        url, _ = self.landcoverpy_model.predict(**model_input_dict)
+        return url

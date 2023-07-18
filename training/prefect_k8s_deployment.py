@@ -25,20 +25,20 @@ customizations = [
         "value": {
             "requests": {
                 "cpu": "2",
-                "memory": "30gi"
+                "memory": "50Gi"
             },
             "limits": {
                 "cpu": "2",
-                "memory": "30Gi"
+                "memory": "50Gi"
             }
         },
     },{
         "op": "replace",
         "path": "/spec/template/spec/parallelism",
-        "value": 5,
+        "value": 1,
     },{
         "op": "remove",
-        "path": "/spec/template/spec/completions",
+        "path": "/spec/template/spec/completions"
     }
 ]
 
@@ -50,6 +50,7 @@ infra_k8s = KubernetesJob(
     cluster_config=cluster_config_block,
     job=KubernetesJob.base_job_manifest(),
     customizations=customizations,
+    pod_watch_timeout_seconds=300,
     finished_job_ttl=600
 )
 
