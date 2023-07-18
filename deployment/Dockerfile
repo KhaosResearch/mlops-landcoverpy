@@ -16,7 +16,10 @@ RUN apt-get install -y  libgeos-dev
 
 RUN pip install --only-binary :all: rasterio==1.3.7
 RUN pip install --upgrade pip
+
+# https://github.com/yaml/pyyaml/issues/724#issuecomment-1638636728
 RUN pip install "cython<3.0.0" && pip install --no-build-isolation pyyaml==5.4.1
+
 RUN pip install -r requirements.txt
 # Port for GRPC
 EXPOSE 5000
