@@ -39,5 +39,5 @@ class LandcoverSeldonWrapper:
         return {'result' : download_url}
     
     def metrics(self):
-        custom_gauge_metrics = [{"type": "GAUGE", "key": k, "value": v} for k,v in self.prediction_metrics]
+        custom_gauge_metrics = [{"type": "GAUGE", "key": k, "value": self.prediction_metrics[k]} for k in self.prediction_metrics]
         return custom_gauge_metrics
