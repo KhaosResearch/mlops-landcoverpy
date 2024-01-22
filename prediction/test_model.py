@@ -1,4 +1,5 @@
 import random
+from multiprocessing import Pool
 
 from seldon_core.seldon_client import SeldonClient
 from shapely.geometry import Polygon, MultiPolygon, shape
@@ -30,17 +31,19 @@ def generate_geometry_within_aoi(aoi_multipolygon: MultiPolygon, max_area: float
     return str([list(coord) for coord in generated_polygon.exterior.coords])
 
 
-sc = SeldonClient(deployment_name="landcover-seldon", namespace="mlops-seldon")
-
-aoi = {"type":"FeatureCollection","features":[{"type":"Feature","properties":{},"geometry":{"coordinates":[[[-6.965033606527584,37.636032133850904],[-1.2046161253377363,38.03129252466405],[0.0210046296753319,41.50772321456839],[0.9527892644194935,41.977286713071095],[-5.868199827129985,42.570315607441415],[-5.441888008908165,39.56272557126417],[-6.789033354488794,38.54309621492828],[-6.965033606527584,37.636032133850904]]],"type":"Polygon"}},{"type":"Feature","properties":{},"geometry":{"coordinates":[[[1.8366176420281306,36.096662337684066],[4.04902365462857,36.215438772168596],[7.001124646305129,36.01670733594368],[9.382856001332101,36.22224818951517],[10.391344220439407,35.753409271904175],[9.92892656755339,37.14816370759756],[7.231490259044961,36.37639563517605],[3.917497080020752,36.68603459062649],[1.8366176420281306,36.096662337684066]]],"type":"Polygon"}}]}
-aoi = MultiPolygon([shape(geometry["geometry"]) for geometry in aoi["features"]])
-
-for i in range(1000):
-
+def send_request(id):
+    sc = SeldonClient(deployment_name="landcover-seldon", namespace="mlops-seldon")
+    aoi = {"type":"FeatureCollection","features":[{"type":"Feature","properties":{},"geometry":{"coordinates":[[[-6.965033606527584,37.636032133850904],[-1.2046161253377363,38.03129252466405],[0.0210046296753319,41.50772321456839],[0.9527892644194935,41.977286713071095],[-5.868199827129985,42.570315607441415],[-5.441888008908165,39.56272557126417],[-6.789033354488794,38.54309621492828],[-6.965033606527584,37.636032133850904]]],"type":"Polygon"}},{"type":"Feature","properties":{},"geometry":{"coordinates":[[[1.8366176420281306,36.096662337684066],[4.04902365462857,36.215438772168596],[7.001124646305129,36.01670733594368],[9.382856001332101,36.22224818951517],[10.391344220439407,35.753409271904175],[9.92892656755339,37.14816370759756],[7.231490259044961,36.37639563517605],[3.917497080020752,36.68603459062649],[1.8366176420281306,36.096662337684066]]],"type":"Polygon"}}]}
+    aoi = MultiPolygon([shape(geometry["geometry"]) for geometry in aoi["features"]])
     geometry = generate_geometry_within_aoi(aoi, 0.0005)
-    print(geometry)
-
     raw_data = {"strData":'{"type":"FeatureCollection","features":[{"type":"Feature","properties":{},"geometry":{"coordinates":[' + geometry + '],"type":"Polygon"}}]}'} 
     res = sc.predict(transport="grpc",gateway="istio",gateway_endpoint="localhost:8080",raw_data=raw_data)
-    print(res)
-    print("\n")
+    return res
+
+if __name__ == '__main__':
+    with Pool(20) as p:
+        res = p.map(send_request, range(1000))
+
+    with open("prediction/results.txt", "w") as f: 
+        for r in res:
+            f.write(str(r))
