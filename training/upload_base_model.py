@@ -1,6 +1,7 @@
-import mlflow
 import json
 import os
+
+import mlflow
 import numpy as np
 import pandas as pd
 from prefect.filesystems import S3

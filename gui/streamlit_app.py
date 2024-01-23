@@ -1,22 +1,24 @@
-import json
-import folium
 import base64
-from folium.plugins import LocateControl, MousePosition, Draw, FloatImage
-from streamlit_folium import folium_static
-import streamlit as st
-from PIL import Image
-import rasterio
-from folium.raster_layers import ImageOverlay
-from json.decoder import JSONDecodeError
-from seldon_core.seldon_client import SeldonClient
+import json
 import requests
-from pyproj import CRS, Proj, Transformer
+from json.decoder import JSONDecodeError
+
+import folium
+import rasterio
+import streamlit as st
+from folium.plugins import LocateControl, MousePosition, Draw, FloatImage
+from folium.raster_layers import ImageOverlay
+from pyproj import CRS, Transformer
+from streamlit_folium import folium_static
+from seldon_core.seldon_client import SeldonClient
+from PIL import Image
+
 
 st.set_page_config(layout="wide")
 
 MAP_WIDTH_PX = 1500
 MAP_HEIGHT_PX = 800
-gateway_endpoint = "localhost:8080" # Modify it with the cluster's Istio Gateway endpoint
+gateway_endpoint = "<CLUSTER-IP>:8080" # Modify it with the cluster's Istio Gateway endpoint
 
 wgs84_crs = CRS.from_epsg(4326)
 
