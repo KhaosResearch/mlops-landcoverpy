@@ -24,7 +24,7 @@ RUN pip install -r requirements.txt
 # Port for GRPC
 EXPOSE 5000
 # Port for REST
-EXPOSE <S3-PORT>
+EXPOSE 9000
 
 # Fixed value for required mlflow and seldon environment variables (don't modify)
 ENV MODEL_NAME="LandcoverSeldonWrapper"
